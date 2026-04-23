@@ -74,7 +74,7 @@ On Linux use:
 On Windows use:
 
 ```powershell
-./mvnw.cmd spring-boot:run
+mvn spring-boot:run
 ```
 
 The API will be available at `http://localhost:8080`.
