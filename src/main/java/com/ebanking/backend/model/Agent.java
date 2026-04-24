@@ -16,7 +16,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "agents")
-@PrimaryKeyJoinColumn(name = "cin")
+@PrimaryKeyJoinColumn(name = "cin", referencedColumnName = "cin")
 @Getter
 @Setter
 @NoArgsConstructor
