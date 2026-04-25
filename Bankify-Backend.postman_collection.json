@@ -1,0 +1,870 @@
+{
+  "info": {
+    "_postman_id": "72685259-6a82-4ac2-8d9c-a4ae3112d4d9",
+    "name": "Bankify API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "39148348",
+    "_collection_link": "https://ewm-internship.postman.co/workspace/EWM-Internship-Workspace~d330e6cb-c078-4423-b318-6e6400da7a43/collection/39148348-72685259-6a82-4ac2-8d9c-a4ae3112d4d9?action=share&source=collection_link&creator=39148348"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Signup Client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cin\": 12345678,\n  \"nom\": \"Ben Ali\",\n  \"prenom\": \"Mohamed\",\n  \"email\": \"mohamed@email.com\",\n  \"motDePasse\": \"password123\",\n  \"dateNaiss\": \"1990-05-15\",\n  \"adresse\": \"12 Rue de la République, Tunis\",\n  \"telephone\": 55123456,\n  \"userType\": \"CLIENT\",\n  \"poste\": null,\n  \"agence\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Signup Agent",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cin\": 87654321,\n  \"nom\": \"Trabelsi\",\n  \"prenom\": \"Sami\",\n  \"email\": \"sami@email.com\",\n  \"motDePasse\": \"password123\",\n  \"dateNaiss\": \"1985-03-20\",\n  \"adresse\": \"5 Avenue Habib Bourguiba, Tunis\",\n  \"telephone\": 55987654,\n  \"userType\": \"AGENT\",\n  \"poste\": \"Conseiller\",\n  \"agence\": \"Agence Tunis Centre\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/signup",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "signup"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Client",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('clientToken', json.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"mohamed@email.com\",\n  \"motDePasse\": \"password123\",\n  \"userType\": \"CLIENT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Agent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "pm.collectionVariables.set('agentToken', json.token);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sami@email.com\",\n  \"motDePasse\": \"password123\",\n  \"userType\": \"AGENT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Client",
+      "item": [
+        {
+          "name": "Consulter Mon Profil (Client)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/profil",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "profil"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulter Profil Par CIN (Agent)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/profil/12345678",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "profil", "12345678"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Modifier Profil (Client)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Ben Ali\",\n  \"prenom\": \"Mohamed Updated\",\n  \"email\": \"mohamed.updated@email.com\",\n  \"dateNaiss\": \"1990-05-15\",\n  \"adresse\": \"15 Rue de Carthage, Tunis\",\n  \"telephone\": 55999888\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/profil",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "profil"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Réinitialiser Mot de Passe (Client)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ancienMotDePasse\": \"password123\",\n  \"nouveauMotDePasse\": \"newpassword456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/mot-de-passe",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "mot-de-passe"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rechercher Clients (Agent)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/rechercher?nom=Ben",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "rechercher"],
+              "query": [
+                {
+                  "key": "nom",
+                  "value": "Ben"
+                },
+                {
+                  "key": "prenom",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "cin",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Rechercher Clients - Tous (Agent)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/rechercher",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "rechercher"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[FAIL] Rechercher Clients (Client - doit échouer)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/clients/rechercher",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "clients", "rechercher"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Compte",
+      "item": [
+        {
+          "name": "Créer Compte pour Client (Agent)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.rib) pm.collectionVariables.set('clientRib', json.rib);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rib\": \"TN5910006035183598478831\",\n  \"soldeInitial\": 1000.00,\n  \"type\": \"COURANT\",\n  \"clientCin\": 12345678\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Créer Compte Destination (Agent)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.rib) pm.collectionVariables.set('destinationRib', json.rib);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rib\": \"TN5910006035183598478832\",\n  \"soldeInitial\": 500.00,\n  \"type\": \"EPARGNE\",\n  \"clientCin\": 12345678\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[FAIL] Créer Compte (Client - doit échouer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rib\": \"TN5910006035183598478899\",\n  \"soldeInitial\": 100.00,\n  \"type\": \"COURANT\",\n  \"clientCin\": 12345678\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulter Solde (Client)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/solde",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "solde"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulter Solde (Agent)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/solde",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "solde"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Effectuer Dépôt (Client)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('transactionId', json.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"montant\": 200.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/depot",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "depot"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Effectuer Retrait (Client)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('transactionId', json.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"montant\": 100.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/retrait",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "retrait"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Effectuer Virement (Client)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.id) pm.collectionVariables.set('transactionId', json.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ribDestination\": \"TN5910006035183598478832\",\n  \"montant\": 150.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/virement",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "virement"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Bloquer Compte (Agent)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/bloquer",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "bloquer"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[FAIL] Bloquer Compte (Client - doit échouer)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/bloquer",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "bloquer"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Débloquer Compte (Agent)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/debloquer",
+              "host": ["{{baseUrl}}"],
+              "path": [
+                "api",
+                "comptes",
+                "TN5910006035183598478831",
+                "debloquer"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Télécharger Relevé (Client)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/releve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "releve"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Télécharger Relevé (Agent)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478831/releve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478831", "releve"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fermer Compte (Client)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478832/fermer",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478832", "fermer"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Fermer Compte (Agent)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/comptes/TN5910006035183598478832/fermer",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "comptes", "TN5910006035183598478832", "fermer"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transaction",
+      "item": [
+        {
+          "name": "Consulter Transactions (Client - ses propres)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulter Transactions (Agent - toutes)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulter Transactions - Filtres (Agent)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions?type=DEPOT&statut=EN_ATTENTE&dateDebut=2026-01-01&dateFin=2026-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions"],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "DEPOT"
+                },
+                {
+                  "key": "statut",
+                  "value": "EN_ATTENTE"
+                },
+                {
+                  "key": "dateDebut",
+                  "value": "2026-01-01"
+                },
+                {
+                  "key": "dateFin",
+                  "value": "2026-12-31"
+                },
+                {
+                  "key": "rib",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Consulter Transactions par RIB (Agent)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions?rib=TN5910006035183598478831",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions"],
+              "query": [
+                {
+                  "key": "rib",
+                  "value": "TN5910006035183598478831"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Approuver Transaction (Agent)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}/approuver",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "{{transactionId}}", "approuver"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Annuler Transaction (Agent)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{agentToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}/annuler",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "{{transactionId}}", "annuler"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "[FAIL] Approuver Transaction (Client - doit échouer)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/transactions/{{transactionId}}/approuver",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "transactions", "{{transactionId}}", "approuver"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "clientToken",
+      "value": ""
+    },
+    {
+      "key": "agentToken",
+      "value": ""
+    },
+    {
+      "key": "clientRib",
+      "value": ""
+    },
+    {
+      "key": "destinationRib",
+      "value": ""
+    },
+    {
+      "key": "transactionId",
+      "value": ""
+    }
+  ]
+}

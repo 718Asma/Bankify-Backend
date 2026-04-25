@@ -12,4 +12,6 @@ public interface CompteRepository extends JpaRepository<Compte, String> {
 
 	List<Compte> findByStatus(String status);
 
+	boolean existsByRib(String rib);
+
 }

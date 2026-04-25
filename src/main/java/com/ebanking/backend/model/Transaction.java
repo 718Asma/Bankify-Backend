@@ -40,6 +40,9 @@ public class Transaction {
 	@Column(name = "montant")
 	private Float montant;
 
+	@Column(name = "statut")
+    private String statut; // EN_ATTENTE, APPROUVE, ANNULE
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "agent_cin")
 	private Agent agent;

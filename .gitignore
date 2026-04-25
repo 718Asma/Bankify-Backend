@@ -46,6 +46,8 @@ Thumbs.db
 *.local
 application-local.properties
 application-*.local.properties
+application.properties
+
 
 # Temporary files
 *.tmp
