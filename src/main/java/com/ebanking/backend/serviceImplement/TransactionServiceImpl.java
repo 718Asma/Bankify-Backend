@@ -12,7 +12,7 @@ import com.ebanking.backend.repository.CompteRepository;
 import com.ebanking.backend.repository.TransactionRepository;
 import com.ebanking.backend.service.TransactionService;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
@@ -63,17 +63,15 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 	
+    @Transactional(readOnly = true)
     public List<TransactionResponse> consulterTransactions(String type, String statut,
                                                             LocalDate dateDebut, LocalDate dateFin,
                                                             String rib, Client currentUser) {
-        // if client, restrict to their own accounts
-        String ribFilter = rib;
         if (!(currentUser instanceof Agent) && rib == null) {
-            // return only transactions linked to client's accounts
             List<String> clientRibs = compteRepository.findByClientCin(currentUser.getCin())
                     .stream().map(Compte::getRib).toList();
 
-            return transactionRepository.findAll().stream()
+            return transactionRepository.findAllWithComptes().stream()
                     .filter(t -> t.getComptes().stream()
                             .anyMatch(c -> clientRibs.contains(c.getRib())))
                     .filter(t -> type == null || t.getType().equals(type))
@@ -84,7 +82,7 @@ public class TransactionServiceImpl implements TransactionService {
                     .toList();
         }
 
-        return transactionRepository.findWithFilters(type, statut, dateDebut, dateFin, ribFilter)
+        return transactionRepository.findWithFilters(type, statut, dateDebut, dateFin, rib)
                 .stream().map(this::toResponse).toList();
     }
 

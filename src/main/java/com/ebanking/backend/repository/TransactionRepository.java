@@ -16,12 +16,12 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
 	@Query("""
         SELECT DISTINCT t FROM Transaction t
-        LEFT JOIN t.comptes c
+        LEFT JOIN FETCH t.comptes c
         WHERE (:type IS NULL OR t.type = :type)
-          AND (:statut IS NULL OR t.statut = :statut)
-          AND (:dateDebut IS NULL OR t.dateRealisation >= :dateDebut)
-          AND (:dateFin IS NULL OR t.dateRealisation <= :dateFin)
-          AND (:rib IS NULL OR c.rib = :rib)
+        AND (:statut IS NULL OR t.statut = :statut)
+        AND (:dateDebut IS NULL OR t.dateRealisation >= :dateDebut)
+        AND (:dateFin IS NULL OR t.dateRealisation <= :dateFin)
+        AND (:rib IS NULL OR c.rib = :rib)
     """)
     List<Transaction> findWithFilters(
         @Param("type") String type,
@@ -30,5 +30,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
         @Param("dateFin") LocalDate dateFin,
         @Param("rib") String rib
     );
+
+    @Query("SELECT DISTINCT t FROM Transaction t LEFT JOIN FETCH t.comptes")
+    List<Transaction> findAllWithComptes();
 
 }

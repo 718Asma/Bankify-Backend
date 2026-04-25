@@ -17,7 +17,7 @@ import com.ebanking.backend.repository.CompteRepository;
 import com.ebanking.backend.repository.TransactionRepository;
 import com.ebanking.backend.service.CompteService;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.io.ByteArrayOutputStream;
