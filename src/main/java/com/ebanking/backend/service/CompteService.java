@@ -1,5 +1,7 @@
 package com.ebanking.backend.service;
 
+import java.util.List;
+
 import com.ebanking.backend.dto.CompteResponse;
 import com.ebanking.backend.dto.CreerCompteRequest;
 import com.ebanking.backend.dto.DepotRetraitRequest;
@@ -10,6 +12,9 @@ import com.ebanking.backend.model.Client;
 public interface CompteService {
 
     public CompteResponse creerCompte(CreerCompteRequest req, Client currentUser);
+    public List<CompteResponse> getAllComptes();
+    public List<CompteResponse> getComptesByClient(Client client);
+    public CompteResponse getDetailsCompte(String rib, Client client);
     public Float consulterSolde(String rib, Client currentUser);
     public TransactionResponse effectuerVirement(String rib, VirementRequest req, Client currentUser);
     public TransactionResponse effectuerDepot(String rib, DepotRetraitRequest req, Client currentUser);

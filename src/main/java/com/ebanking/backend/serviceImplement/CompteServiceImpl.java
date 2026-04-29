@@ -1,5 +1,15 @@
 package com.ebanking.backend.serviceImplement;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ebanking.backend.dto.CompteResponse;
 import com.ebanking.backend.dto.CreerCompteRequest;
 import com.ebanking.backend.dto.DepotRetraitRequest;
@@ -17,16 +27,7 @@ import com.ebanking.backend.repository.CompteRepository;
 import com.ebanking.backend.repository.TransactionRepository;
 import com.ebanking.backend.service.CompteService;
 
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.time.LocalDate;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +56,32 @@ public class CompteServiceImpl implements CompteService {
         compte.setClient(proprietaire);
         compteRepository.save(compte);
         return toResponse(compte);
+    }
+
+    public List<CompteResponse> getComptesByClient(Client client) {
+        List<Compte> comptes = compteRepository.findByClient(client);
+
+        return comptes.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public CompteResponse getDetailsCompte(String rib, Client client) {
+        Compte compte = compteRepository.findByRib(rib)
+                .orElseThrow(() -> new ResourceNotFoundException("Compte introuvable: " + rib));
+
+        if (!compte.getClient().getCin().equals(client.getCin())) {
+            throw new UnauthorizedException("Accès non autorisé à ce compte");
+        }
+
+        return toResponse(compte);
+    }
+
+    public List<CompteResponse> getAllComptes() {
+        return compteRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     public Float consulterSolde(String rib, Client currentUser) {

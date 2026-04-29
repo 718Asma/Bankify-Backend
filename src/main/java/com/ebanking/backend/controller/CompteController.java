@@ -1,5 +1,7 @@
 package com.ebanking.backend.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import com.ebanking.backend.service.CompteService;
 
 import lombok.RequiredArgsConstructor;
 
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/comptes")
@@ -36,6 +39,25 @@ public class CompteController {
             @RequestBody CreerCompteRequest req,
             @AuthenticationPrincipal Client currentUser) {
         return ResponseEntity.ok(compteService.creerCompte(req, currentUser));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CompteResponse>> getAllComptes() {
+        return ResponseEntity.ok(compteService.getAllComptes());
+    }
+        
+
+    @GetMapping("/mes-comptes")
+    public ResponseEntity<List<CompteResponse>> getComptesClient(
+            @AuthenticationPrincipal Client currentUser) {
+        return ResponseEntity.ok(compteService.getComptesByClient(currentUser));
+    }
+
+    @GetMapping("/{rib}/details")
+    public ResponseEntity<CompteResponse> getDetailsCompte(
+            @PathVariable String rib,
+            @AuthenticationPrincipal Client currentUser) {
+        return ResponseEntity.ok(compteService.getDetailsCompte(rib, currentUser));
     }
 
     @GetMapping("/{rib}/solde")
