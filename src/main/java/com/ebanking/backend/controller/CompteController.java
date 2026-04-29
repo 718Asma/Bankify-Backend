@@ -1,17 +1,10 @@
 package com.ebanking.backend.controller;
 
-import com.ebanking.backend.dto.CompteResponse;
-import com.ebanking.backend.dto.CreerCompteRequest;
-import com.ebanking.backend.dto.DepotRetraitRequest;
-import com.ebanking.backend.dto.TransactionResponse;
-import com.ebanking.backend.dto.VirementRequest;
-import com.ebanking.backend.model.Client;
-import com.ebanking.backend.service.CompteService;
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +12,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import com.ebanking.backend.dto.CompteResponse;
+import com.ebanking.backend.dto.CreerCompteRequest;
+import com.ebanking.backend.dto.DepotRetraitRequest;
+import com.ebanking.backend.dto.TransactionResponse;
+import com.ebanking.backend.dto.VirementRequest;
+import com.ebanking.backend.model.Client;
+import com.ebanking.backend.service.CompteService;
+
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/comptes")
 @RequiredArgsConstructor
