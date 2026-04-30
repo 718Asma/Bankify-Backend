@@ -13,5 +13,6 @@ public interface TransactionService {
     public List<TransactionResponse> consulterTransactions(String type, String statut,
                                                             LocalDate dateDebut, LocalDate dateFin,
                                                             String rib, Client currentUser);
+    public List<TransactionResponse> getMesTransactions(Client currentUser);
 
 }

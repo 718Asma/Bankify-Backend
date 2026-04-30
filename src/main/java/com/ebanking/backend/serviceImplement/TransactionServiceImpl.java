@@ -78,6 +78,17 @@ public class TransactionServiceImpl implements TransactionService {
         return toResponse(transaction);
     }
 
+    @Transactional(readOnly = true)
+    public List<TransactionResponse> getMesTransactions(Client currentUser) {
+        List<String> clientRibs = compteRepository.findByClientCin(currentUser.getCin())
+                .stream().map(Compte::getRib).toList();
+ 
+        return transactionRepository.findAllWithComptes().stream()
+                .filter(t -> t.getComptes().stream()
+                        .anyMatch(c -> clientRibs.contains(c.getRib())))
+                .map(this::toResponse)
+                .toList();
+    }
 	
     @Transactional(readOnly = true)
     public List<TransactionResponse> consulterTransactions(String type, String statut,

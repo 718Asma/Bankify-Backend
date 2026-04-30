@@ -42,6 +42,12 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.annuler(id, currentUser));
     }
 
+    @GetMapping("/mes-transactions")
+    public ResponseEntity<List<TransactionResponse>> getMesTransactions(
+            @AuthenticationPrincipal Client currentUser) {
+        return ResponseEntity.ok(transactionService.getMesTransactions(currentUser));
+    }
+    
     @GetMapping
     public ResponseEntity<List<TransactionResponse>> consulterTransactions(
             @RequestParam(required = false) String type,
