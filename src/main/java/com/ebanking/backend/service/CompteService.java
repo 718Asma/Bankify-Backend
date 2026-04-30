@@ -13,6 +13,7 @@ public interface CompteService {
 
     public CompteResponse creerCompte(CreerCompteRequest req, Client currentUser);
     public List<CompteResponse> getAllComptes();
+    public List<CompteResponse> getComptesByCin(Integer cin, Client currentUser);
     public List<CompteResponse> getComptesByClient(Client client);
     public CompteResponse getDetailsCompte(String rib, Client client);
     public Float consulterSolde(String rib, Client currentUser);

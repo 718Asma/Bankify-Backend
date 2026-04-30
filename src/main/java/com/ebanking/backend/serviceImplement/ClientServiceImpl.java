@@ -25,6 +25,13 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public List<ClientResponse> getAllClients() {
+        return clientRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     public ClientResponse modifierProfil(ModifierProfilRequest req, Client currentUser) {
         currentUser.setNom(req.nom());
         currentUser.setPrenom(req.prenom());

@@ -45,7 +45,16 @@ public class CompteController {
     public ResponseEntity<List<CompteResponse>> getAllComptes() {
         return ResponseEntity.ok(compteService.getAllComptes());
     }
-        
+    
+    @GetMapping("/{cin}")
+    public ResponseEntity<List<CompteResponse>> getAllComptes(
+            @PathVariable Integer cin,
+            @AuthenticationPrincipal Client currentUser) {
+
+        return ResponseEntity.ok(
+            compteService.getComptesByCin(cin, currentUser)
+        );
+    }
 
     @GetMapping("/mes-comptes")
     public ResponseEntity<List<CompteResponse>> getComptesClient(

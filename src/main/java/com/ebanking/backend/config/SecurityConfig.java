@@ -50,6 +50,7 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/client/mot-de-passe").authenticated()
                 .requestMatchers("/api/clients/rechercher").hasRole("AGENT")
                 .requestMatchers("/api/comptes").hasRole("AGENT")
                 .requestMatchers("/api/comptes/*/bloquer").hasRole("AGENT")

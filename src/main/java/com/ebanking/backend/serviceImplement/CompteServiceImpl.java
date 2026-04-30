@@ -58,6 +58,14 @@ public class CompteServiceImpl implements CompteService {
         return toResponse(compte);
     }
 
+    public List<CompteResponse> getComptesByCin(Integer cin, Client currentUser) {
+        requireAgent(currentUser);
+        return compteRepository.findByClientCin(cin)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     public List<CompteResponse> getComptesByClient(Client client) {
         List<Compte> comptes = compteRepository.findByClient(client);
 
@@ -70,7 +78,7 @@ public class CompteServiceImpl implements CompteService {
         Compte compte = compteRepository.findByRib(rib)
                 .orElseThrow(() -> new ResourceNotFoundException("Compte introuvable: " + rib));
 
-        if (!compte.getClient().getCin().equals(client.getCin())) {
+        if (!(client instanceof Agent) && !compte.getClient().getCin().equals(client.getCin())){
             throw new UnauthorizedException("Accès non autorisé à ce compte");
         }
 

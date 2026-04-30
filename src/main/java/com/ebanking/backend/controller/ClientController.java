@@ -29,6 +29,11 @@ public class ClientController {
 
 	private final ClientService clientService;
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ClientResponse>> getAllClients() {
+        return ResponseEntity.ok(clientService.getAllClients());
+    }
+
 	@PutMapping("/profil")
     public ResponseEntity<ClientResponse> modifierProfil(
             @RequestBody ModifierProfilRequest req,
