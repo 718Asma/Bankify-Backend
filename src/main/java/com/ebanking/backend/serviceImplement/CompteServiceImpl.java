@@ -26,6 +26,7 @@ import com.ebanking.backend.repository.ClientRepository;
 import com.ebanking.backend.repository.CompteRepository;
 import com.ebanking.backend.repository.TransactionRepository;
 import com.ebanking.backend.service.CompteService;
+import com.ebanking.backend.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -36,6 +37,7 @@ public class CompteServiceImpl implements CompteService {
 	private final CompteRepository compteRepository;
     private final ClientRepository clientRepository;
     private final TransactionRepository transactionRepository;
+    private final NotificationService notificationService;
 
     public CompteResponse creerCompte(CreerCompteRequest req, Client currentUser) {
         requireAgent(currentUser);
@@ -179,6 +181,8 @@ public class CompteServiceImpl implements CompteService {
         if ("FERME".equals(compte.getStatus())) throw new BusinessException("Impossible de bloquer un compte fermé");
         compte.setStatus("BLOQUE");
         compteRepository.save(compte);
+
+        notificationService.envoyer(compte.getClient(), "Votre compte " + rib + " a été bloqué.");
     }
 
     public void debloquerCompte(String rib, Client currentUser) {
@@ -187,6 +191,8 @@ public class CompteServiceImpl implements CompteService {
         if (!"BLOQUE".equals(compte.getStatus())) throw new BusinessException("Le compte n'est pas bloqué");
         compte.setStatus("ACTIF");
         compteRepository.save(compte);
+
+        notificationService.envoyer(compte.getClient(), "Votre compte " + rib + " a été débloqué.");
     }
 
     @Transactional

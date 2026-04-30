@@ -1,5 +1,13 @@
 package com.ebanking.backend.serviceImplement;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ebanking.backend.dto.TransactionResponse;
 import com.ebanking.backend.exception.BusinessException;
 import com.ebanking.backend.exception.ResourceNotFoundException;
@@ -10,17 +18,10 @@ import com.ebanking.backend.model.Compte;
 import com.ebanking.backend.model.Transaction;
 import com.ebanking.backend.repository.CompteRepository;
 import com.ebanking.backend.repository.TransactionRepository;
+import com.ebanking.backend.service.NotificationService;
 import com.ebanking.backend.service.TransactionService;
 
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private final TransactionRepository transactionRepository;
     private final CompteRepository compteRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public TransactionResponse approuver(Integer id, Client currentUser) {
@@ -44,6 +46,13 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setStatut("APPROUVE");
         transaction.setAgent((Agent) currentUser);
         transactionRepository.save(transaction);
+
+        transaction.getComptes().forEach(c ->
+            notificationService.envoyer(c.getClient(),
+                "Votre transaction " + transaction.getType() + " de " +
+                transaction.getMontant() + " TND a été approuvée.")
+        );
+
         return toResponse(transaction);
     }
 
@@ -59,6 +68,13 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setStatut("ANNULE");
         transaction.setAgent((Agent) currentUser);
         transactionRepository.save(transaction);
+
+        transaction.getComptes().forEach(c ->
+            notificationService.envoyer(c.getClient(),
+                "Votre transaction " + transaction.getType() + " de " +
+                transaction.getMontant() + " TND a été annulée.")
+        );
+        
         return toResponse(transaction);
     }
 
